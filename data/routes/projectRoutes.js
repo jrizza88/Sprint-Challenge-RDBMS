@@ -18,6 +18,21 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/:id', async (req, res) => {
+    try{
+        const project = await db('projects')
+        // .select('actions.id', 'actions.action_description').from('projects')
+        .select('*').from('projects')
+        .innerJoin('actions', 'projects.id', 'actions.project_id')
+        .where({'project_id': req.params.id})
+        res.status(200).json(project)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+});
+
+
+
 router.post('/', async (req, res) => {
     try {
         const project = req.body;
